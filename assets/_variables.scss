@@ -1,0 +1,29 @@
+$bg-color: white;
+$primary-color: black;
+$secondary-color: #4655e5;
+$bg-secondary-color: #F4F4F5;
+$border-color: #dddddd;
+$hover-color: #3e4cca;
+$secondary-text: #585860;
+$font: "Manrope", sans-serif;
+$font-secondary: "Inter", sans-serif;
+
+@mixin respond-to($media) {
+  @if $media == handhelds {
+    @media only screen and (max-width: 479px) {
+      @content;
+    }
+  } @else if $media == wide-handhelds {
+    @media only screen and (max-width: 767px) {
+      @content;
+    }
+  } @else if $media == tablets {
+    @media only screen and (min-width: 768px) and (max-width: 959px) {
+      @content;
+    }
+  } @else if $media == wide-tablets {
+    @media only screen and (max-width: 1200px) {
+      @content;
+    }
+  }
+}
