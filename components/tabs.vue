@@ -9,14 +9,25 @@
       <template #header>
         <h3 class="font-semibold text-[18px]">{{ id }}. {{ name }}</h3>
       </template>
-      <UForm ref="form" :state="state" class="space-y-4" @submit="onSubmit">
-        <UFormGroup>
-          <UInput :placeholder="labels.placeholder" v-model="state.input" />
-        </UFormGroup>
-        <UButton type="submit"> Отправить </UButton>
-      </UForm>
+      <UTextarea
+        disabled
+        placeholder="Ответ"
+        size="md"
+        :ui="{ size: { md: 'text-base' } }"
+        class="font-semibold"
+      />
       <template #footer>
-        <Placeholder class="h-8" />
+        <UForm ref="form" :state="state" class="space-y-4" @submit="onSubmit">
+          <UFormGroup>
+            <UInput
+              :placeholder="labels.placeholder"
+              v-model="state.input"
+              size="xl"
+              class="font-semibold"
+            />
+          </UFormGroup>
+          <UButton size="xl" type="submit"> Отправить </UButton>
+        </UForm>
       </template>
     </UCard>
   </UModal>
@@ -79,7 +90,6 @@
 <script setup lang="ts">
 import data from "assets/data.json";
 import type { FormError, FormSubmitEvent } from "#ui/types";
-import axios from "axios";
 
 const isOpen = ref(false);
 const name = ref();
@@ -106,22 +116,19 @@ const state = reactive({
 
 const form = ref();
 
+//нужно убрать возможность нажимать кнопку, пока не придёт ответ с сервера (добавить атрибут loading)
 async function onSubmit(event: FormSubmitEvent<any>) {
   form.value.clear();
   try {
-    const response = await axios
-      .post(`http://localhost:18080/`, {
-        id: state.id,
-        input: state.input,
-      })
-      .then(function (response) {
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-    state.id = 0;
-    state.input = "";
+    const response = await fetch(`http://127.0.0.1:18080/`, {
+      method: "POST",
+      mode: "no-cors",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(state),
+    });
   } catch (e: any) {
     if (e.statusCode === 422) {
       form.value.setErrors(
@@ -144,8 +151,13 @@ async function onSubmit(event: FormSubmitEvent<any>) {
   p {
     cursor: pointer;
     font: {
-      size: 20px;
+      size: 18px;
       weight: 500;
+    }
+    @include respond-to(wide-tablets) {
+      p{
+        font-size: 14px
+      }
     }
     transition: 200ms ease-in;
     &:hover {

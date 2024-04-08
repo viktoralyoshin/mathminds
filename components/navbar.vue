@@ -83,7 +83,7 @@ const isOpen = ref(false);
     padding: 20px 20px 20px 20px;
   }
   img {
-    width: 70px;
+    width: 60px;
   }
   .mobile {
     @include respond-to(wide-handhelds) {
@@ -96,7 +96,7 @@ const isOpen = ref(false);
       display: none;
     }
     display: flex;
-    gap: 10px;
+    gap: 5px;
     border-radius: 10px;
     padding: 5px;
     border: 2px solid $border-color;
