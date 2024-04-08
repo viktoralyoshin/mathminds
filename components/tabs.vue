@@ -9,13 +9,12 @@
       <template #header>
         <h3 class="font-semibold text-[18px]">{{ id }}. {{ name }}</h3>
       </template>
-      <form class="flex flex-col gap-5" @submit.prevent="">
-        <UInput
-          padded
-          v-for="input in placeholders"
-          placeholder="{{input.placeholder}}"
-        ></UInput>
-      </form>
+      <UForm ref="form" :state="state" class="space-y-4" @submit="onSubmit">
+        <UFormGroup>
+          <UInput :placeholder="labels.placeholder" v-model="state.input" />
+        </UFormGroup>
+        <UButton type="submit"> Отправить </UButton>
+      </UForm>
       <template #footer>
         <Placeholder class="h-8" />
       </template>
@@ -64,7 +63,8 @@
                 (isOpen = true),
                   (name = item.name),
                   (id = item.id),
-                  (placeholders = item.placeholders)
+                  (labels = item.labels),
+                  (state.id = item.id)
               "
             >
               {{ item.id }}. {{ item.name }}
@@ -78,11 +78,13 @@
 
 <script setup lang="ts">
 import data from "assets/data.json";
+import type { FormError, FormSubmitEvent } from "#ui/types";
+import axios from "axios";
 
 const isOpen = ref(false);
 const name = ref();
 const id = ref();
-const placeholders = ref();
+const labels = ref();
 
 const items = [
   {
@@ -96,6 +98,42 @@ const items = [
     description: "Задачи по графам",
   },
 ];
+
+const state = reactive({
+  id: 0,
+  input: "",
+});
+
+const form = ref();
+
+async function onSubmit(event: FormSubmitEvent<any>) {
+  form.value.clear();
+  try {
+    const response = await axios
+      .post(`http://localhost:18080/`, {
+        id: state.id,
+        input: state.input,
+      })
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    state.id = 0;
+    state.input = "";
+  } catch (e: any) {
+    if (e.statusCode === 422) {
+      form.value.setErrors(
+        e.data.errors.map((e: any) => ({
+          // Map validation errors to { path: string, message: string }
+          message: e.message,
+          path: e.path,
+        }))
+      );
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>

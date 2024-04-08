@@ -2,9 +2,8 @@
   {
     "id": 1,
     "name": "Булева функция от n аргументов",
-    "placeholders": {
-        "place1": "Число n",
-        "place2": "Число a"
+    "labels": {
+      "placeholder": "Введите n"
     }
   }
 ]
