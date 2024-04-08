@@ -85,22 +85,6 @@ const isOpen = ref(false);
   img {
     width: 70px;
   }
-  .links {
-    display: flex;
-    gap: 10px;
-    a {
-      cursor: pointer;
-      font: {
-        size: 20px;
-        weight: 500;
-      }
-      transition: 200ms ease-in;
-      &:hover {
-        color: $secondary-color;
-        opacity: 1;
-      }
-    }
-  }
   .mobile {
     @include respond-to(wide-handhelds) {
       display: flex;
@@ -114,7 +98,7 @@ const isOpen = ref(false);
     display: flex;
     gap: 10px;
     border-radius: 10px;
-    padding: 10px;
+    padding: 5px;
     border: 2px solid $border-color;
     button {
       cursor: pointer;
