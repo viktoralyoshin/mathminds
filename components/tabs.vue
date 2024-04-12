@@ -120,7 +120,7 @@ const form = ref();
 async function onSubmit(event: FormSubmitEvent<any>) {
   form.value.clear();
   try {
-    const response = await $fetch(`http://127.0.1.109:18080/`, {
+    const response = await $fetch(`http://127.0.0.1:18080/`, {
       method: "POST",
       mode: "no-cors",
       headers: {
