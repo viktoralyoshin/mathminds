@@ -120,7 +120,7 @@ const form = ref();
 async function onSubmit(event: FormSubmitEvent<any>) {
   form.value.clear();
   try {
-    const response = await fetch(`http://127.0.0.1:18080/`, {
+    const response = await $fetch(`http://127.0.1.109:18080/`, {
       method: "POST",
       mode: "no-cors",
       headers: {
@@ -128,7 +128,9 @@ async function onSubmit(event: FormSubmitEvent<any>) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(state),
-    });
+    })
+    .then((response: any) => response.json())
+    .then((answer: any) => console.log(answer))
   } catch (e: any) {
     if (e.statusCode === 422) {
       form.value.setErrors(
@@ -155,8 +157,8 @@ async function onSubmit(event: FormSubmitEvent<any>) {
       weight: 500;
     }
     @include respond-to(wide-tablets) {
-      p{
-        font-size: 14px
+      p {
+        font-size: 14px;
       }
     }
     transition: 200ms ease-in;
