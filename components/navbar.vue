@@ -1,9 +1,30 @@
 <template>
   <div class="container">
-    <img src="/public/logo.png" alt="" />
-    <div class="buttons">
-      <button type="button">Войти</button>
-      <button type="button">Регистрация</button>
+    <a href="/"><img src="/public/logo.png" alt="" /></a>
+    <UDropdown
+      v-if="user"
+      :items="items"
+      mode="hover"
+      :popper="{ placement: 'bottom-start' }"
+      class="profile"
+    >
+      <div class="flex items-center gap-2">
+        <UAvatar
+          chip-color="primary"
+          :src="user.user_metadata.avatar_url"
+          alt="Avatar"
+          size="lg"
+          chip-text=""
+          chip-position="top-right"
+        />
+        <h1 class="text-[18px] font-semibold name">
+          {{ user.user_metadata.displayName }}
+        </h1>
+      </div>
+    </UDropdown>
+    <div v-else class="buttons">
+      <NuxtLink to="/login">Войти</NuxtLink>
+      <NuxtLink to="/signup">Регистрация</NuxtLink>
     </div>
     <div class="mobile">
       <button @click="isOpen = true">
@@ -40,24 +61,41 @@
           </template>
           <div>
             <div class="flex flex-col justify-start gap-5">
-              <a href="#tabs" class="text-[20px] font-semibold">Задачи</a>
-              <a href="#tabs" class="text-[20px] font-semibold">Статьи</a>
+              <a href="/#tabs" class="text-[20px] font-semibold">Задачи</a>
+              <a href="/#tabs" class="text-[20px] font-semibold">Статьи</a>
             </div>
           </div>
           <template #footer>
-            <div class="flex gap-4 justify-between">
-              <button
-                type="button"
-                class="rounded-md ring-2 ring-[#4655e5] text-[#4655e5] w-1/2 py-4 text-[18px] font-semibold"
+            <div v-if="user" class="flex justify-between">
+              <div class="flex items-center gap-2" @click="profile">
+                <UAvatar
+                  chip-color="primary"
+                  :src="user.user_metadata.avatar_url"
+                  alt="Avatar"
+                  size="lg"
+                  chip-text=""
+                  chip-position="top-right"
+                />
+                <h1 class="text-[18px] font-semibold name">
+                  {{ user.user_metadata.displayName }}
+                </h1>
+              </div>
+              <UButton @click="signOut" size="xl" variant="outline"
+                >Выйти</UButton
               >
-                Войти
-              </button>
-              <button
-                type="button"
-                class="rounded-md ring-2 ring-[#4655e5] bg-[#4655e5] text-white w-1/2 py-4 text-[18px] font-semibold"
+            </div>
+            <div v-else class="flex flex-col gap-4">
+              <UButton
+                to="/login"
+                size="xl"
+                color="primary"
+                variant="outline"
+                block
+                >Войти</UButton
               >
-                Регистрация
-              </button>
+              <UButton to="/signup" size="xl" color="primary" block
+                >Регистрация</UButton
+              >
             </div>
           </template>
         </UCard>
@@ -68,6 +106,48 @@
 
 <script lang="ts" setup>
 const isOpen = ref(false);
+const user = useSupabaseUser();
+const supabase = useSupabaseClient();
+const toast = useToast();
+
+const profile = () => {
+  navigateTo("/profile");
+};
+
+const signOut = async () => {
+  const { error } = await supabase.auth.signOut();
+  if (error) {
+    toast.add({
+      title: error.message,
+      icon: "i-heroicons-x-mark-16-solid",
+    });
+  } else {
+    toast.add({
+      title: "Вы вышли из аккаунта",
+      icon: "i-heroicons-check-badge",
+    });
+  }
+};
+
+const items = [
+  [
+    {
+      label: "Профиль",
+      click: () => {
+        navigateTo("/profile");
+      },
+    },
+  ],
+  [
+    {
+      label: "Выйти",
+      icon: "i-heroicons-trash-20-solid",
+      click: () => {
+        signOut();
+      },
+    },
+  ],
+];
 </script>
 
 <style lang="scss" scoped>
@@ -82,6 +162,9 @@ const isOpen = ref(false);
   @include respond-to(wide-tablets) {
     padding: 20px 20px 20px 20px;
   }
+  .name {
+    font-family: $font;
+  }
   img {
     width: 60px;
   }
@@ -91,16 +174,19 @@ const isOpen = ref(false);
     }
     display: none;
   }
+  .profile {
+    @include respond-to(wide-handhelds) {
+      display: none;
+    }
+    display: flex;
+  }
   .buttons {
     @include respond-to(wide-handhelds) {
       display: none;
     }
     display: flex;
     gap: 5px;
-    border-radius: 10px;
-    padding: 5px;
-    border: 2px solid $border-color;
-    button {
+    a {
       cursor: pointer;
       background-color: $bg-color;
       padding: 10px 20px 10px 20px;

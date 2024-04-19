@@ -1,19 +1,19 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Manrope:wght@200..800&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Manrope:wght@200..800&display=swap");
 
-::-webkit-scrollbar{
-    width: 16px;
+::-webkit-scrollbar {
+  width: 16px;
 }
-::-webkit-scrollbar-track{
-    background: $bg-color;
-    border-radius: 20px;
+::-webkit-scrollbar-track {
+  background: $bg-color;
+  border-radius: 20px;
 }
 
-::-webkit-scrollbar-thumb{
-    background: $secondary-color;
-    border-radius: 20px;
-    padding-right: 10px;
-    border: 6px solid $bg-color;
+::-webkit-scrollbar-thumb {
+  background: $secondary-color;
+  border-radius: 20px;
+  padding-right: 10px;
+  border: 6px solid $bg-color;
 }
 
 body {
@@ -25,22 +25,22 @@ body {
   margin: auto;
 }
 
-button{
+button {
   border: 0;
 }
 
-a{
-    text-decoration: none; 
-    &:visited{
-        color: $primary-color;
-    }
+a {
+  text-decoration: none;
+  &:visited {
+    color: $primary-color;
+  }
 }
 
-input{
+input {
   outline: 0;
   border: 0;
 }
 
-p{
+p {
   margin: 0;
 }

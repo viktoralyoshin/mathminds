@@ -3,9 +3,8 @@
     rel="stylesheet"
     href="https://cdn-uicons.flaticon.com/2.2.0/uicons-bold-rounded/css/uicons-bold-rounded.css"
   />
-  <div>
-    <NuxtPage />
-  </div>
+  <NuxtPage />
+  <UNotifications />
 </template>
 <script lang="ts" setup>
 useHead({
@@ -18,3 +17,13 @@ useHead({
   ],
 });
 </script>
+<style lang="scss">
+.page-enter-active,
+.page-leave-active {
+  transition: all 0.4s;
+}
+.page-enter-from,
+.page-leave-to {
+  opacity: 0;
+}
+</style>

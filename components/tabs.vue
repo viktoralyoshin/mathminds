@@ -119,29 +119,15 @@ const form = ref();
 //нужно убрать возможность нажимать кнопку, пока не придёт ответ с сервера (добавить атрибут loading)
 async function onSubmit(event: FormSubmitEvent<any>) {
   form.value.clear();
-  try {
-    const response = await $fetch(`http://127.0.0.1:18080/`, {
-      method: "POST",
-      mode: "no-cors",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(state),
-    })
-    .then((response: any) => response.json())
-    .then((answer: any) => console.log(answer))
-  } catch (e: any) {
-    if (e.statusCode === 422) {
-      form.value.setErrors(
-        e.data.errors.map((e: any) => ({
-          // Map validation errors to { path: string, message: string }
-          message: e.message,
-          path: e.path,
-        }))
-      );
-    }
-  }
+  const res = await $fetch(`http://localhost:7000/`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(state),
+  })
+  console.log(res)
 }
 </script>
 
