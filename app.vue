@@ -3,7 +3,7 @@
     rel="stylesheet"
     href="https://cdn-uicons.flaticon.com/2.2.0/uicons-bold-rounded/css/uicons-bold-rounded.css"
   />
-  <NuxtPage />
+  <NuxtPage :transition="{ name: 'page', mode: 'out-in'}"/>
   <UNotifications />
 </template>
 <script lang="ts" setup>

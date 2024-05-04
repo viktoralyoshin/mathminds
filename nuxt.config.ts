@@ -7,9 +7,9 @@ export default defineNuxtConfig({
   },
   modules: ["@nuxt/ui", "@nuxtjs/supabase"],
 
-  app: {
-    pageTransition: { name: 'page', mode: 'out-in' }
-  },
+  // app: {
+  //   pageTransition: { name: 'page', mode: 'out-in' }
+  // },
 
   supabase: {
     redirect: false,

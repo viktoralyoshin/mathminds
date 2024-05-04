@@ -46,7 +46,8 @@
           />
         </UFormGroup>
         <NuxtLink to="/login"> Уже есть аккаунт? Войти</NuxtLink>
-        <UButton size="xl" type="submit"> Создать аккаунт </UButton>
+        <UButton v-if="isLoading" size="xl" type="submit" loading> Идёт создание </UButton>
+        <UButton v-else size="xl" type="submit"> Создать аккаунт </UButton>
       </UForm>
     </div>
   </div>
@@ -57,6 +58,7 @@ const supabase = useSupabaseClient();
 
 const toast = useToast()
 const form = ref();
+const isLoading = ref(false);
 
 const userInfo = reactive({
   displayName: "",
@@ -65,6 +67,7 @@ const userInfo = reactive({
 });
 
 const signUp = async () => {
+  isLoading.value = true;
   const { data, error } = await supabase.auth.signUp({
     email: userInfo.email,
     password: userInfo.password,
@@ -79,6 +82,7 @@ const signUp = async () => {
     toast.add({ title: error.message, icon: "i-heroicons-x-mark-16-solid"})
   } else{
     toast.add({ title: 'Регистрация прошла успешно!', icon: "i-heroicons-check-badge"})
+    isLoading.value = false;
     navigateTo('/')  
   }
 };

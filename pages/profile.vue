@@ -3,12 +3,11 @@ const supabase = useSupabaseClient();
 const user = useSupabaseUser();
 const uploading = ref(false);
 const files = ref();
+const isOpen = ref(false);
 
-watch(() => {
-  if (!user.value) {
-    navigateTo("/");
-  }
-});
+if (!user.value) {
+  navigateTo("/");
+}
 const uploadAvatar = async (evt) => {
   files.value = evt.target.files;
   try {
@@ -47,7 +46,25 @@ const uploadAvatar = async (evt) => {
 </script>
 
 <template>
-  <div>
+  <div class="flex flex-col gap-2">
+    <UModal v-model="isOpen">
+      <UCard
+        :ui="{
+          ring: '',
+          divide: 'divide-y divide-gray-100 dark:divide-gray-800',
+        }"
+      >
+        <template #header>
+          <Placeholder class="h-8" />
+        </template>
+
+        <Placeholder class="h-32" />
+
+        <template #footer>
+          <Placeholder class="h-8" />
+        </template>
+      </UCard>
+    </UModal>
     <Navbar />
     <div class="profile-container">
       <UAvatar

@@ -9,24 +9,26 @@
       <template #header>
         <h3 class="font-semibold text-[18px]">{{ id }}. {{ name }}</h3>
       </template>
-      <UTextarea
-        disabled
-        placeholder="Ответ"
-        size="md"
-        :ui="{ size: { md: 'text-base' } }"
-        class="font-semibold"
-      />
       <template #footer>
         <UForm ref="form" :state="state" class="space-y-4" @submit="onSubmit">
           <UFormGroup>
-            <UInput
+            <UTextarea
               :placeholder="labels.placeholder"
               v-model="state.input"
               size="xl"
               class="font-semibold"
             />
           </UFormGroup>
-          <UButton size="xl" type="submit"> Отправить </UButton>
+          <UTextarea
+            disabled
+            placeholder="Ответ"
+            size="md"
+            :ui="{ size: { md: 'text-base' }, base: 'disabled:opacity-100' }"
+            class="font-semibold"
+            v-model="response"
+          />
+          <UButton v-if="isLoading" size="xl" type="submit" loading>Ждём ответ</UButton>
+          <UButton v-else size="xl" type="submit">Отправить</UButton>
         </UForm>
       </template>
     </UCard>
@@ -69,16 +71,18 @@
           <div class="item-container">
             <p
               v-for="item in data"
-              :key="item.id"
+              :key="item.id_problem"
               @click="
                 (isOpen = true),
                   (name = item.name),
-                  (id = item.id),
+                  (id = item.id_problem),
                   (labels = item.labels),
-                  (state.id = item.id)
+                  (state.id = item.id),
+                  (state.input = ''),
+                  (response = '')
               "
             >
-              {{ item.id }}. {{ item.name }}
+              {{ item.id_problem }}. {{ item.name }}
             </p>
           </div>
         </div>
@@ -95,17 +99,13 @@ const isOpen = ref(false);
 const name = ref();
 const id = ref();
 const labels = ref();
+const isLoading = ref(false);
 
 const items = [
   {
     key: "fuction",
     label: "Булевы функции",
     description: "Задачи по булевым функциям",
-  },
-  {
-    key: "graph",
-    label: "Графы",
-    description: "Задачи по графам",
   },
 ];
 
@@ -116,8 +116,11 @@ const state = reactive({
 
 const form = ref();
 
+const response = ref();
+
 //нужно убрать возможность нажимать кнопку, пока не придёт ответ с сервера (добавить атрибут loading)
 async function onSubmit(event: FormSubmitEvent<any>) {
+  isLoading.value = true;
   form.value.clear();
   const res = await $fetch(`http://localhost:7000/`, {
     method: "POST",
@@ -126,8 +129,9 @@ async function onSubmit(event: FormSubmitEvent<any>) {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(state),
-  })
-  console.log(res)
+  });
+  response.value = res;
+  isLoading.value = false;
 }
 </script>
 

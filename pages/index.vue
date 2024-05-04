@@ -12,12 +12,17 @@
     </div>
     <div class="main-container">
       <Tabs />
+      <div class="games">
+        <h1>Игры</h1>
+        <div class="games-container">
+          <GameCard />
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
-<script lang="ts" setup>
-</script>
+<script lang="ts" setup></script>
 
 <style lang="scss" scoped>
 .main {
@@ -54,6 +59,22 @@
         }
         @include respond-to(wide-tablets) {
           font-size: 18px;
+        }
+      }
+    }
+  }
+  .main-container {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+    .games {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      h1 {
+        font: {
+          weight: 600;
+          size: 36px;
         }
       }
     }

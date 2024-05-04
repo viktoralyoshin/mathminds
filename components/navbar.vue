@@ -126,6 +126,7 @@ const signOut = async () => {
       title: "Вы вышли из аккаунта",
       icon: "i-heroicons-check-badge",
     });
+    navigateTo("/");
   }
 };
 
