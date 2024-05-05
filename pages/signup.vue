@@ -45,8 +45,10 @@
             icon="i-heroicons-lock-closed"
           />
         </UFormGroup>
-        <NuxtLink to="/login"> Уже есть аккаунт? Войти</NuxtLink>
-        <UButton v-if="isLoading" size="xl" type="submit" loading> Идёт создание </UButton>
+        <NuxtLink to="/login" class="text-indigo-500"> Уже есть аккаунт? Войти</NuxtLink>
+        <UButton v-if="isLoading" size="xl" type="submit" loading>
+          Идёт создание
+        </UButton>
         <UButton v-else size="xl" type="submit"> Создать аккаунт </UButton>
       </UForm>
     </div>
@@ -54,9 +56,11 @@
 </template>
 
 <script lang="ts" setup>
+import games from "assets/games.json";
+
 const supabase = useSupabaseClient();
 
-const toast = useToast()
+const toast = useToast();
 const form = ref();
 const isLoading = ref(false);
 
@@ -78,13 +82,21 @@ const signUp = async () => {
       },
     },
   });
-  if (error){
-    toast.add({ title: error.message, icon: "i-heroicons-x-mark-16-solid"})
-  } else{
-    toast.add({ title: 'Регистрация прошла успешно!', icon: "i-heroicons-check-badge"})
-    isLoading.value = false;
-    navigateTo('/')  
+  if (error) {
+    toast.add({ title: error.message, icon: "i-heroicons-x-mark-16-solid" });
+  } else {
+    for (let i = 1; i <= games.length; i++) {
+      const { error } = await supabase
+        .from('games')
+        .insert({ user_id: data.user?.id, game_id: i, record: 0 }).single();
+    }
+    toast.add({
+      title: "Регистрация прошла успешно!",
+      icon: "i-heroicons-check-badge",
+    });
+    navigateTo("/");
   }
+  isLoading.value = false;
 };
 </script>
 

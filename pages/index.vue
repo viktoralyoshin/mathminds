@@ -12,17 +12,19 @@
     </div>
     <div class="main-container">
       <Tabs />
-      <div class="games">
+      <div class="games" id="games">
         <h1>Игры</h1>
         <div class="games-container">
-          <GameCard />
+          <GameCard v-for="item in games" :key="item.id" :item="item" />
         </div>
       </div>
     </div>
   </div>
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import games from "assets/games.json";
+</script>
 
 <style lang="scss" scoped>
 .main {
@@ -67,6 +69,7 @@
     display: flex;
     flex-direction: column;
     gap: 50px;
+    padding-bottom: 50px;
     .games {
       display: flex;
       flex-direction: column;
@@ -76,6 +79,16 @@
           weight: 600;
           size: 36px;
         }
+        @include respond-to(wide-tablets) {
+          padding-left: 20px;
+        }
+      }
+
+      .games-container {
+        display: grid;
+        gap: 30px;
+        grid-template-columns: repeat(auto-fill, 350px);
+        justify-content: center;
       }
     }
   }

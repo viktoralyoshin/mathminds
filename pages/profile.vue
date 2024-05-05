@@ -1,9 +1,9 @@
 <script setup>
+import games from "assets/games.json";
 const supabase = useSupabaseClient();
 const user = useSupabaseUser();
 const uploading = ref(false);
 const files = ref();
-const isOpen = ref(false);
 
 if (!user.value) {
   navigateTo("/");
@@ -47,24 +47,6 @@ const uploadAvatar = async (evt) => {
 
 <template>
   <div class="flex flex-col gap-2">
-    <UModal v-model="isOpen">
-      <UCard
-        :ui="{
-          ring: '',
-          divide: 'divide-y divide-gray-100 dark:divide-gray-800',
-        }"
-      >
-        <template #header>
-          <Placeholder class="h-8" />
-        </template>
-
-        <Placeholder class="h-32" />
-
-        <template #footer>
-          <Placeholder class="h-8" />
-        </template>
-      </UCard>
-    </UModal>
     <Navbar />
     <div class="profile-container">
       <UAvatar
@@ -104,14 +86,12 @@ const uploadAvatar = async (evt) => {
       <div class="profile-info">
         <p>{{ user.user_metadata.displayName }}</p>
         <p>{{ user.email }}</p>
-        <UButton
-          block
-          color="primary"
-          variant="ghost"
-          size="xl"
-          icon="i-heroicons-pencil-square"
-          >Редактировать профиль</UButton
-        >
+      </div>
+    </div>
+    <div class="games">
+      <h1>Мои рекорды</h1>
+      <div class="games-container">
+        <GameCardProfile v-for="item in games" :key="item.id" :item="item" />
       </div>
     </div>
   </div>
@@ -135,6 +115,39 @@ const uploadAvatar = async (evt) => {
       font: {
         weight: 600;
         size: 32px;
+      }
+    }
+  }
+}
+.games {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding-bottom: 50px;
+  h1 {
+    padding-top: 20px;
+    font: {
+      weight: 600;
+      size: 36px;
+    }
+    @include respond-to(wide-tablets) {
+      padding-left: 15px;
+      font-size: 28px;
+    }
+  }
+  .games-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    h1 {
+      padding-top: 0px;
+      font: {
+        weight: 500;
+        size: 24px;
+      }
+      @include respond-to(wide-tablets) {
+        padding-left: 0px;
+        font-size: 18px;
       }
     }
   }

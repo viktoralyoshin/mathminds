@@ -62,7 +62,7 @@
           <div>
             <div class="flex flex-col justify-start gap-5">
               <a href="/#tabs" class="text-[20px] font-semibold">Задачи</a>
-              <a href="/#tabs" class="text-[20px] font-semibold">Статьи</a>
+              <a href="/#games" class="text-[20px] font-semibold">Игры</a>
             </div>
           </div>
           <template #footer>

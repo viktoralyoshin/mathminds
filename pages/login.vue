@@ -36,7 +36,7 @@
             icon="i-heroicons-lock-closed"
           />
         </UFormGroup>
-        <NuxtLink to="/signup"> Нет аккаунта? Создать аккаунт</NuxtLink>
+        <NuxtLink to="/signup" class="text-indigo-500"> Нет аккаунта? Создать аккаунт</NuxtLink>
         <UButton v-if="isLogin" size="xl" type="submit" loading> Вход </UButton>
         <UButton v-else size="xl" type="submit"> Войти </UButton>
       </UForm>
@@ -71,9 +71,9 @@ const signIn = async () => {
       title: "Вы вошли в аккаунт!",
       icon: "i-heroicons-check-badge",
     });
-    isLogin.value = false;
     navigateTo("/");
   }
+  isLogin.value = false;
 };
 </script>
 

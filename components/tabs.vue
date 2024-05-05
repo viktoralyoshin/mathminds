@@ -122,7 +122,7 @@ const response = ref();
 async function onSubmit(event: FormSubmitEvent<any>) {
   isLoading.value = true;
   form.value.clear();
-  const res = await $fetch(`http://localhost:7000/`, {
+  const res = await $fetch(`http://92.53.105.185:7000/`, {
     method: "POST",
     headers: {
       Accept: "application/json",
